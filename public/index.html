@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RecHouse</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div>RecHouse</div>
+    <div id="status">Connecting...</div>
+  </div>
+
+  <div class="layout">
+    <div class="panel">
+      <h2>Player</h2>
+      <input id="name" placeholder="Name" maxlength="12" />
+      <button id="join">Join</button>
+      <p>Use WASD or arrow keys to move.</p>
+    </div>
+
+    <div class="game-wrap">
+      <canvas id="game" width="900" height="600"></canvas>
+    </div>
+
+    <div class="panel">
+      <h2>Chat</h2>
+      <div id="chat"></div>
+      <input id="msg" placeholder="Message" />
+      <button id="send">Send</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="client.js"></script>
+</body>
+</html>
