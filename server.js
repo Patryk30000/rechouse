@@ -1,48 +1,22 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.use(express.static('public'));
+app.use(express.static(__dirname));
 
-const players = {};
-
-io.on('connection', (socket) => {
-  players[socket.id] = {
-    x: 100 + Math.random() * 500,
-    y: 100 + Math.random() * 300,
-    color: `hsl(${Math.random() * 360}, 80%, 60%)`,
-    name: 'Player'
-  };
-
-  io.emit('state', { players });
-
-  socket.on('join', (name) => {
-    if (players[socket.id]) players[socket.id].name = name;
-    io.emit('state', { players });
-  });
-
-  socket.on('move', (data) => {
-    if (players[socket.id]) {
-      players[socket.id].x = data.x;
-      players[socket.id].y = data.y;
-      players[socket.id].name = data.name;
-      players[socket.id].color = data.color;
-      io.emit('state', { players });
-    }
-  });
-
-  socket.on('chat', (data) => {
-    io.emit('chat', data);
-  });
-
-  socket.on('disconnect', () => {
-    delete players[socket.id];
-    io.emit('state', { players });
-  });
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-server.listen(process.env.PORT || 3000);
+io.on('connection', (socket) => {
+  console.log('player connected', socket.id);
+});
+
+server.listen(process.env.PORT || 3000, () => {
+  console.log('Server running');
+});
